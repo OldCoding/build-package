@@ -33,6 +33,9 @@ jobs:
           CONFIG_TARGET_x86_64_DEVICE_generic=y
           EOF
           make defconfig
+          make download -j8
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
 
       - name: Compile IPK package
         run: |
@@ -44,4 +47,4 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: luci-app-filebrowser
-          path: openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/*/*filebrowser*.ipk
+          path: openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64/feeds/*/*/*filebrowser*.ipk
