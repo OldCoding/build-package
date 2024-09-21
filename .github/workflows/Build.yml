@@ -41,8 +41,8 @@ jobs:
         run: |
           cd openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
           git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
-          make package/luci-app-filebrowser/compile
-          find ./ | grep *.ipk | grep filebrowser
+          make package/luci-app-filebrowser/compile V=s
+          find ./ | grep ipk | grep filebrowser
 
       - name: Upload IPK
         uses: actions/upload-artifact@main
