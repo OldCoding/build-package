@@ -24,13 +24,13 @@ jobs:
         run: |
           wget https://downloads.openwrt.org/snapshots/targets/x86/64/openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
           tar -I zstd -xvf openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
-          cd openwrt-sdk*
+          cd openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
       - name: Compile IPK package
         run: |
-          cd openwrt-sdk*
+          cd openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
           git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
           make package/luci-app-filebrowser/compile V=s
 
@@ -38,4 +38,4 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: luci-app-filebrowser
-          path: bin/packages/*/*filebrowser*.ipk
+          path: openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/*/*filebrowser*.ipk
