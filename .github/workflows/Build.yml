@@ -18,7 +18,7 @@ jobs:
       - name: Set up OpenWrt SDK
         run: |
           wget https://downloads.openwrt.org/snapshots/targets/x86/64/openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
-          tar -xzf openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
+          tar -I zstd -xf  openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
           cd openwrt-sdk*
           ./scripts/feeds update -a
           ./scripts/feeds install -a
