@@ -1,0 +1,36 @@
+name: Compile IPK
+
+on:
+  push:
+    branches:
+      - main  # 或者你想要触发编译的分支  
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up OpenWrt SDK
+        run: |
+          wget https://downloads.openwrt.org/snapshots/targets/x86/64/openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
+          tar -xzf openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
+          cd openwrt-sdk*
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Compile IPK package
+        run: |
+          cd openwrt-sdk*
+          git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
+          make package/luci-app-filebrowser/compile V=s
+
+      - name: Upload IPK
+        uses: actions/upload-artifact@main
+        with:
+          name: luci-app-filebrowser
+          path: bin/packages/*/*filebrowser*.ipk
