@@ -15,10 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Initialization environment
+        run: |
+         sudo apt update
+         sudo apt install zstd
+
       - name: Set up OpenWrt SDK
         run: |
           wget https://downloads.openwrt.org/snapshots/targets/x86/64/openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
-          tar -xvJf openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
+          tar -I zstd -xvf openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
           cd openwrt-sdk*
           ./scripts/feeds update -a
           ./scripts/feeds install -a
