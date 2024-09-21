@@ -27,6 +27,12 @@ jobs:
           cd openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          cat >> .config <<EOF
+          CONFIG_TARGET_x86=y
+          CONFIG_TARGET_x86_64=y
+          CONFIG_TARGET_x86_64_DEVICE_generic=y
+          EOF
+          make defconfig
 
       - name: Compile IPK package
         run: |
