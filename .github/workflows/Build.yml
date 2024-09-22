@@ -25,6 +25,7 @@ jobs:
           wget https://downloads.openwrt.org/snapshots/targets/x86/64/openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
           tar -I zstd -xvf openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
           cd openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
+          find ./ | grep ipk | grep filebrowser
           git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
           ./scripts/feeds update -a
           ./scripts/feeds install -a
@@ -43,7 +44,6 @@ jobs:
         run: |
           cd openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
           make package/luci-app-filebrowser/compile V=s
-          find ./ | grep ipk | grep filebrowser
 
       - name: Upload IPK
         uses: actions/upload-artifact@main
