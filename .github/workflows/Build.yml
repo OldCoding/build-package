@@ -33,15 +33,15 @@ jobs:
           CONFIG_TARGET_x86_64_DEVICE_generic=y
           EOF
           find ./ | grep Makefile | grep filebrowser | xargs rm -f
-          make defconfig
-          make download -j8
-          find dl -size -1024c -exec ls -l {} \;
-          find dl -size -1024c -exec rm -f {} \;
 
       - name: Compile IPK package
         run: |
           cd openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64
           git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
+          make defconfig
+          make download -j8
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
           make package/luci-app-filebrowser/compile V=s
           find ./ | grep ipk | grep filebrowser
 
