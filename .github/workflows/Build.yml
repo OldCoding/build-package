@@ -22,9 +22,15 @@ jobs:
 
       - name: Set up OpenWrt SDK
         run: |
-          wget https://archive.openwrt.org/releases/22.03.7/targets/x86/64/openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz
-          tar -I zstd -xvf openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz
-          cd openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64
+          echo $PWD
+          echo "当前目录文件\n"
+          ls
+          echo "上级目录文件\n"
+          ls ..
+          wget -q https://archive.openwrt.org/releases/22.03.7/targets/x86/64/openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz -O SDK.tar.xz
+          tar -I zstd -xf SDK.tar.xz
+          mv openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64 ./SDK
+          cd SDK
           find ./ | grep Makefile | grep filebrowser | xargs rm -f
           git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
           ./scripts/feeds update -a
@@ -42,7 +48,7 @@ jobs:
 
       - name: Compile IPK package
         run: |
-          cd openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64
+          cd SDK
           make package/luci-app-filebrowser/compile V=s
           find ./ | grep ipk | grep filebrowser
 
@@ -50,7 +56,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: luci-app-filebrowser
-          path: openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64/bin/packages/x86_64/*/*filebrowser*.ipk
+          path: SDK/bin/packages/x86_64/*/*filebrowser*.ipk
 
       - name: Upload OpenWrt Firmware to Release
         id: release
@@ -62,4 +68,4 @@ jobs:
           tag: 1.1
           commit: main
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64/bin/packages/x86_64/*/*filebrowser*.ipk
+          artifacts: SDK/bin/packages/x86_64/*/*filebrowser*.ipk
