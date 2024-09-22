@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: luci-app-filebrowser
-          path: openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/x86_64/luci/*filebrowser*.ipk
+          path: openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/x86_64/*/*filebrowser*.ipk
 
       - name: Upload OpenWrt Firmware to Release
         id: release
@@ -62,4 +62,4 @@ jobs:
           tag: 1.1
           commit: main
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/x86_64/luci/*filebrowser*.ipk
+          artifacts: openwrt-sdk-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/x86_64/*/*filebrowser*.ipk
