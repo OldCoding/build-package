@@ -34,8 +34,7 @@ jobs:
       - name: Compile Filebrowser IPK
         run: |
           cd SDK
-          ls
-          find filebrowser
+          ls package
           make package/luci-app-filebrowser/compile V=99
           find *filebrowser*.ipk
 
