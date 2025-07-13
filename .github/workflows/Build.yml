@@ -22,49 +22,25 @@ jobs:
 
       - name: Install OpenWrt SDK
         run: |
-          cd ..
-          mkdir tmp
-          curl -SLk --connect-timeout 30 --retry 2 "https://archive.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2" -o "./tmp/SDK.tar.bz2"
-          cd \tmp
+          curl -SLk --connect-timeout 30 --retry 2 "https://archive.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2" -o "./SDK.tar.bz2"
           tar xjf SDK.tar.bz2
-          mv "OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64" "SDK"
-
-      - name: Set up OpenWrt SDK
-        run: |
-          wget -q https://archive.openwrt.org/releases/22.03.7/targets/x86/64/openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz -O SDK.tar.xz
-          tar -I zstd -xf SDK.tar.xz
-          mv openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64 ./SDK
-          cd SDK
-          find ./ | grep Makefile | grep filebrowser | xargs rm -f
-          git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a
-          cat >> .config <<EOF
-          CONFIG_TARGET_x86=y
-          CONFIG_TARGET_x86_64=y
-          CONFIG_TARGET_x86_64_DEVICE_generic=y
-          EOF
-          make defconfig
-          make download -j8         
+          mv "OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64" "SDK"      
 
       - name: Clone Filebrowser Source Codes
         run: |
-          cd ..
-          git clone https://github.com/OldCoding/luci-app-filebrowser ./tmp/SDK/package/luci-app-filebrowser
+          git clone https://github.com/OldCoding/luci-app-filebrowser ./SDK/package/luci-app-filebrowser
 
       - name: Compile Filebrowser IPK
         run: |
-          cd ..
-          cd tmp/SDK
+          cd SDK
           make package/luci-app-filebrowser/compile V=99
           find *filebrowser*.ipk
-          cp /bin/ar71xx/packages/base/*/*filebrowser*.ipk /tmp
 
       - name: Upload IPK
         uses: actions/upload-artifact@main
         with:
           name: luci-app-filebrowser
-          path: /tmp/*filebrowser*.ipk
+          path: /SDK/bin/ar71xx/packages/base/*filebrowser*.ipk
 
 
       - name: Upload OpenWrt Firmware to Release
