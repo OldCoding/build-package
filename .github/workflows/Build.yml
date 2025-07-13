@@ -29,6 +29,7 @@ jobs:
       - name: Clone Filebrowser Source Codes
         run: |
           git clone https://github.com/OldCoding/luci-app-filebrowser ./SDK/package/luci-app-filebrowser
+          ls SDK/package/*
 
       - name: Compile Filebrowser IPK
         run: |
