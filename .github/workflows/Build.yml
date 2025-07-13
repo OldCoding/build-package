@@ -29,7 +29,8 @@ jobs:
           find ./ | grep Makefile | grep filebrowser | xargs rm -f
           git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
           ./scripts/feeds update -a
-          ./scripts/feeds install -a
+          ./scripts/feeds install luci-app-filebrowser
+          make menuconfig
 
       - name: Compile IPK package
         run: |
