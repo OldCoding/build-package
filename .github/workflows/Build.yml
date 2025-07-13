@@ -30,12 +30,11 @@ jobs:
         run: |
           cd SDK
           git clone --depth 1 https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
-          ls package/luci-app-filebrowser
+          ./scripts/feeds update && ./scripts/feeds install luci-app-filebrowser
 
       - name: Compile Filebrowser IPK
         run: |
           cd SDK
-          ls package/luci-app-filebrowser
           make package/luci-app-filebrowser/compile V=99
           find *filebrowser*.ipk
 
