@@ -24,14 +24,17 @@ jobs:
         run: |
           curl -SLk --connect-timeout 30 --retry 2 "https://archive.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2" -o "./SDK.tar.bz2"
           tar xjf SDK.tar.bz2
-          mv "OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64" "SDK"      
+          mv "OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64" "SDK"
+          ls
 
       - name: Clone Filebrowser Source Codes
         run: |
+          ls
           git clone https://github.com/OldCoding/luci-app-filebrowser ./SDK/package/luci-app-filebrowser
 
       - name: Compile Filebrowser IPK
         run: |
+          ls
           cd SDK
           find filebrowser
           make package/luci-app-filebrowser/compile V=99
