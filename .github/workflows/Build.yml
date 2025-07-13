@@ -31,7 +31,6 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install luci-app-filebrowser
           make defconfig
-          make download -j8
 
       - name: Compile IPK package
         run: |
