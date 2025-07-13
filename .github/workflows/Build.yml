@@ -36,7 +36,6 @@ jobs:
         run: |
           cd SDK
           make package/luci-app-filebrowser/compile V=99
-          find *filebrowser*.ipk
 
       - name: Upload IPK
         uses: actions/upload-artifact@main
@@ -49,10 +48,10 @@ jobs:
         id: release
         uses: ncipollo/release-action@main
         with:
-          name: 1.1
+          name: 1.2
           allowUpdates: true
           removeArtifacts: true
-          tag: 1.1
+          tag: 1.2
           commit: main
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: SDK/bin/packages/x86_64/*/*filebrowser*.ipk
+          artifacts: /SDK/bin/ar71xx/packages/base/*filebrowser*.ipk
