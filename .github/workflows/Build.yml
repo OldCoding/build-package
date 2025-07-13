@@ -30,13 +30,6 @@ jobs:
           git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-          cat >> .config <<EOF
-          CONFIG_TARGET_x86=y
-          CONFIG_TARGET_x86_64=y
-          CONFIG_TARGET_x86_64_DEVICE_generic=y
-          EOF
-          #make defconfig
-          #make download -j8
 
       - name: Compile IPK package
         run: |
