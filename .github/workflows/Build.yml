@@ -17,8 +17,17 @@ jobs:
 
       - name: Initialization environment
         run: |
-         sudo apt update
-         sudo apt install zstd
+          sudo apt-get update
+          sudo apt-get -y install curl git tar zstd
+
+      - name: Install OpenWrt SDK
+        run: |
+          cd ..
+          mkdir tmp
+          curl -SLk --connect-timeout 30 --retry 2 "https://archive.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2" -o "./tmp/SDK.tar.bz2"
+          cd \tmp
+          tar xjf SDK.tar.bz2
+          mv "OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64" "SDK"
 
       - name: Set up OpenWrt SDK
         run: |
@@ -38,17 +47,25 @@ jobs:
           make defconfig
           make download -j8         
 
-      - name: Compile IPK package
+      - name: Clone Filebrowser Source Codes
         run: |
-          cd SDK
-          make package/luci-app-filebrowser/compile V=s
-          find ./ | grep ipk | grep filebrowser
+          cd ..
+          git clone https://github.com/OldCoding/luci-app-filebrowser ./tmp/SDK/package/luci-app-filebrowser
+
+      - name: Compile Filebrowser IPK
+        run: |
+          cd ..
+          cd tmp/SDK
+          make package/luci-app-filebrowser/compile V=99
+          find *filebrowser*.ipk
+          cp /bin/ar71xx/packages/base/*/*filebrowser*.ipk /tmp
 
       - name: Upload IPK
         uses: actions/upload-artifact@main
         with:
           name: luci-app-filebrowser
-          path: SDK/bin/packages/x86_64/*/*filebrowser*.ipk
+          path: /tmp/*filebrowser*.ipk
+
 
       - name: Upload OpenWrt Firmware to Release
         id: release
