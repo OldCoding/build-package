@@ -22,19 +22,14 @@ jobs:
 
       - name: Set up OpenWrt SDK
         run: |
-          wget -q https://archive.openwrt.org/releases/22.03.7/targets/x86/64/openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz -O SDK.tar.xz
-          tar -Jxf SDK.tar.xz
-          mv openwrt-sdk-22.03.7-x86-64_gcc-11.2.0_musl.Linux-x86_64 ./SDK
+          curl -SLk --connect-timeout 30 --retry 2 "https://archive.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2" -o "./SDK.tar.bz2"
+          tar xjf SDK.tar.bz2
+          mv "OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64" "SDK"
           cd SDK
           find ./ | grep Makefile | grep filebrowser | xargs rm -f
           git clone https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
           ./scripts/feeds update -a
           ./scripts/feeds install luci-app-filebrowser
-          cat >> .config <<EOF
-          CONFIG_TARGET_x86=y
-          CONFIG_TARGET_x86_64=y
-          CONFIG_TARGET_x86_64_DEVICE_generic=y
-          EOF
           make defconfig
           make download -j8
 
@@ -48,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: luci-app-filebrowser
-          path: SDK/bin/packages/x86_64/*/*filebrowser*.ipk
+          path: SDK/bin/ar71xx/packages/base/*filebrowser*.ipk
 
       - name: Upload OpenWrt Firmware to Release
         id: release
@@ -60,4 +55,4 @@ jobs:
           tag: 1.2
           commit: main
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: SDK/bin/packages/x86_64/*/*filebrowser*.ipk
+          artifacts: SDK/bin/ar71xx/packages/base//*filebrowser*.ipk
