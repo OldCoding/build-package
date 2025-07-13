@@ -36,13 +36,12 @@ jobs:
         run: |
           cd SDK
           make package/luci-app-filebrowser/compile V=s
-          find ./ | grep ipk | grep filebrowser
 
       - name: Upload IPK
         uses: actions/upload-artifact@main
         with:
           name: luci-app-filebrowser
-          path: SDK/bin/ar71xx/packages/base/*filebrowser*.ipk
+          path: SDK/bin/ar71xx/packages/base/*.ipk
 
       - name: Upload OpenWrt Firmware to Release
         id: release
@@ -54,4 +53,4 @@ jobs:
           tag: 1.2
           commit: main
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: SDK/bin/ar71xx/packages/base//*filebrowser*.ipk
+          artifacts: SDK/bin/ar71xx/packages/base/*.ipk
